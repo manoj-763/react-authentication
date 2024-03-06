@@ -1,5 +1,6 @@
 import {Component} from 'react'
 import Cookies from 'js-cookie'
+import {Redirect} from 'react-router-dom'
 
 import './index.css'
 
@@ -38,7 +39,7 @@ class LoginForm extends Component {
     const data = await response.json()
     console.log(data)
     if (response.ok === true) {
-      this.onSubmitSuccess(data.jwt_token)
+      this.onSubmitSuccess(data.jwt_token)   //here jwt_token is JWt token name
     }
     else{
       this.onSubmitFailure(data.error_msg)
@@ -90,6 +91,11 @@ class LoginForm extends Component {
   }
 
   render() {
+    const jwtToken = Cookies.get('jwt_token')  // if jwt token is present it means jwt token define  and if not present and not define its means undefined and redirect to home
+    if(jwtToken !== undefined){
+      return <Redirect to ='/'/>
+    }
+
     const{showSubmitError, errorMsg} = this.state
     return (
       <div className="login-form-container">
